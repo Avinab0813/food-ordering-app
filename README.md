@@ -2,7 +2,7 @@
 
 > A full-stack food delivery application built with the MERN stack (MongoDB, Express, React, Node.js). Users can browse menus, add items to a cart, and place orders seamlessly.
 
-![Banner Image](https://via.placeholder.com/1000x300?text=Food+Ordering+App+Banner)
+![Banner Image](https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=80)
 <!-- Replace the link above with a screenshot of your Home Page later -->
 
 ## 🚀 Live Demo
