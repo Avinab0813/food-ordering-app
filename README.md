@@ -7,7 +7,6 @@
 
 ## 🚀 Live Demo
 <!-- If you have deployed it, put the link here. If not, delete this section or say "Coming Soon" -->
-- ## 🚀 Live Demo
 
 > Live link coming soon! currently running locally.
 
