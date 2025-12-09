@@ -7,22 +7,27 @@ const { Server } = require("socket.io");
 
 // Import Models
 const Food = require("./models/Food");
-const Order = require("./models/Order"); // Import the Order Model
+const Order = require("./models/Order");
 
 dotenv.config();
+
+// Initialize Stripe
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// --- SOCKET.IO ---
+// --- SOCKET.IO SETUP ---
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
 });
 
-// --- DATABASE ---
+// --- DATABASE CONNECTION ---
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected Successfully!"))
@@ -32,61 +37,91 @@ mongoose
 
 // 1. Get Menu
 app.get("/api/foods", async (req, res) => {
-  const foods = await Food.find();
-  res.json(foods);
+  try {
+    const foods = await Food.find();
+    res.json(foods);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 // 2. Add Food (Seed data)
 app.post("/api/foods", async (req, res) => {
-  const newFood = new Food(req.body);
-  await newFood.save();
-  res.status(201).json(newFood);
+  try {
+    const newFood = new Food(req.body);
+    await newFood.save();
+    res.status(201).json(newFood);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
-// 3. Get All Orders (For Admin Dashboard)
+// 3. Get All Orders (For Admin)
 app.get("/api/orders", async (req, res) => {
   try {
-    const orders = await Order.find().sort({ createdAt: -1 }); // Newest first
+    const orders = await Order.find().sort({ createdAt: -1 });
     res.json(orders);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-// 4. CHECKOUT & SAVE ORDER
+// 4. CHECKOUT ROUTE (FIXED FOR CART ARRAY)
 app.post("/api/create-checkout-session", async (req, res) => {
   try {
-    const { products } = req.body;
+    // We expect 'cartItems' (an Array) from the frontend now
+    const { cartItems } = req.body;
+
+    // Check if cart exists
+    if (!cartItems || cartItems.length === 0) {
+      return res.status(400).json({ error: "Cart is empty" });
+    }
 
     // --- SAVE ORDER TO MONGODB ---
+    const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+    
     const newOrder = new Order({
       customerName: "Guest User",
-      items: products,
-      totalAmount: products.reduce((sum, item) => sum + item.price, 0),
-      status: "Paid", // In a real app, we would verify this via Webhook
+      items: cartItems,
+      totalAmount: totalAmount,
+      status: "Paid", 
     });
-    await newOrder.save(); 
+    await newOrder.save();
     // -----------------------------
 
-    // Create Stripe Session
-    const lineItems = products.map((product) => ({
+    // Create Stripe Line Items
+    const lineItems = cartItems.map((item) => ({
       price_data: {
         currency: "usd",
-        product_data: { name: product.name },
-        unit_amount: Math.round(product.price * 100),
+        product_data: {
+          name: item.name,
+          // Images removed for safety
+        },
+        unit_amount: Math.round(item.price * 100), // Convert to cents
       },
-      quantity: 1,
+      quantity: item.quantity || 1,
     }));
 
+    // Add Delivery Fee ($5)
+    lineItems.push({
+      price_data: {
+        currency: "usd",
+        product_data: { name: "Delivery Fee" },
+        unit_amount: 500,
+      },
+      quantity: 1,
+    });
+
+    // Create Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
       success_url: `${process.env.CLIENT_URL}/tracker`,
-      cancel_url: `${process.env.CLIENT_URL}/cancel`,
+      cancel_url: `${process.env.CLIENT_URL}/cart`,
     });
 
-    // Simulate Updates
+    // Simulate Status Updates
     setTimeout(() => io.emit("order_status", "Preparing your food 🍳"), 5000);
     setTimeout(() => io.emit("order_status", "Out for Delivery 🛵"), 10000);
     setTimeout(() => io.emit("order_status", "Delivered! 😋"), 15000);
@@ -94,11 +129,12 @@ app.post("/api/create-checkout-session", async (req, res) => {
     res.json({ url: session.url });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server Error" });
+    console.error("Stripe Error:", err);
+    res.status(500).json({ error: err.message });
   }
 });
 
+// --- START SERVER ---
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
