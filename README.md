@@ -1,46 +1,25 @@
-# 🍔 Food Ordering App
+# 🚀 FlavorFleet - Food Ordering Platform
 
-> A full-stack food delivery application built with the MERN stack (MongoDB, Express, React, Node.js). Users can browse menus, add items to a cart, and place orders seamlessly.
-
-![Banner Image](https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=80)
-<!-- Replace the link above with a screenshot of your Home Page later -->
-
-## 🚀 Live Demo
-<!-- If you have deployed it, put the link here. If not, delete this section or say "Coming Soon" -->
-
-> Live link coming soon! currently running locally.
-
-## ✨ Features
-
-- **User Authentication**: Secure login and signup (JWT/Firebase/Auth0).
-- **Browse Food**: Dynamic menu categories and food items.
-- **Cart Management**: Add, remove, and adjust quantities in real-time.
-- **Order System**: Checkout process with order summary.
-- **Responsive Design**: Works on mobile and desktop.
-- **Admin Panel**: (If you have one) Manage food items and orders.
-
-## 🛠️ Tech Stack
-
-- **Frontend:** React.js, Redux (or Context API), CSS Modules/Tailwind
-- **Backend:** Node.js, Express.js
-- **Database:** MongoDB, Mongoose
-- **Tools:** Git, Postman, VS Code
+A full-stack MERN application for ordering food with real-time tracking and Stripe payments.
 
 ## 📸 Screenshots
 
-| Home Page | Menu Page |
+| **Home Page** | **Shopping Cart** |
 |:---:|:---:|
-| <img src="./screenshots/home.png" width="400" alt="Home Page"> | <img src="./screenshots/menu.png" width="400" alt="Menu Page"> |
+| ![Home](./screenshots/home.png) | ![Cart](./screenshots/cart.png) |
 
-| Shopping Cart | Checkout |
+| **Login / Sign Up** | **Admin Dashboard** |
 |:---:|:---:|
-| <img src="./screenshots/cart.png" width="400" alt="Cart"> | <img src="./screenshots/checkout.png" width="400" alt="Checkout"> |
+| ![Login](./screenshots/login.png) | *Admin view* |
 
-<!-- create a folder named 'screenshots' in your root and put images there -->
+## ✨ Features
+- **Browse Menu:** Filter by category (Burgers, Pizza, etc.).
+- **Secure Payment:** Integrated **Stripe** payment gateway.
+- **Real-Time Tracking:** Live order updates using **Socket.io**.
+- **Admin Panel:** Restaurant owner dashboard to view incoming orders.
 
-## 💻 Installation & Run Locally
-
-**1. Clone the repository**
-```bash
-git clone https://github.com/Avinab0813/food-ordering-app.git
-cd food-ordering-app
+## 🛠 Tech Stack
+- **Frontend:** React.js, CSS3
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB Atlas
+- **Payment:** Stripe API
