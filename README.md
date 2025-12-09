@@ -1,25 +1,68 @@
-# 🚀 FlavorFleet - Food Ordering Platform
+# 🚀 FlavorFleet - Modern Food Ordering Platform
 
-A full-stack MERN application for ordering food with real-time tracking and Stripe payments.
+<div align="center">
 
-## 📸 Screenshots
+  ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+  ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
+  ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
+  ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+  ![Stripe](https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=Stripe&logoColor=white)
 
-| **Home Page** | **Shopping Cart** |
+  <br />
+  
+  **A full-stack MERN application delivering a seamless food ordering experience with real-time tracking, secure payments, and a professional UI.**
+
+  [**🔴 View Live Demo**](https://your-vercel-link-here.vercel.app)
+  
+</div>
+
+---
+
+## 📸 Project Screenshots
+
+<div align="center">
+
+| **Home Page & Menu** | **Shopping Cart** |
 |:---:|:---:|
-| ![Home](./screenshots/home.png) | ![Cart](./screenshots/cart.png) |
+| <img src="./screenshots/home.png" width="400" /> | <img src="./screenshots/cart.png" width="400" /> |
 
-| **Login / Sign Up** | **Admin Dashboard** |
+| **Secure Login** | **Admin Dashboard** |
 |:---:|:---:|
-| ![Login](./screenshots/login.png) | *Admin view* |
+| <img src="./screenshots/login.png" width="400" /> | *Admin view* |
 
-## ✨ Features
-- **Browse Menu:** Filter by category (Burgers, Pizza, etc.).
-- **Secure Payment:** Integrated **Stripe** payment gateway.
-- **Real-Time Tracking:** Live order updates using **Socket.io**.
-- **Admin Panel:** Restaurant owner dashboard to view incoming orders.
+</div>
+
+---
+
+## ✨ Key Features
+
+- **🍔 Dynamic Menu System:** Browse food items filtered by categories (Burgers, Pizza, Drinks, etc.).
+- **💳 Secure Payments:** Integrated **Stripe Gateway** for safe and instant transactions.
+- **🛒 Smart Cart:** Add/remove items with automatic total calculation and delivery fees.
+- **🛵 Real-Time Tracking:** Live order updates (Preparing -> Out for Delivery -> Delivered) using **Socket.io**.
+- **📱 Responsive UI:** Fully optimized for Desktop, Tablet, and Mobile devices.
+
+---
 
 ## 🛠 Tech Stack
-- **Frontend:** React.js, CSS3
-- **Backend:** Node.js, Express.js
-- **Database:** MongoDB Atlas
-- **Payment:** Stripe API
+
+| Component | Technology |
+| :--- | :--- |
+| **Frontend** | React.js, CSS3, React Router |
+| **Backend** | Node.js, Express.js |
+| **Database** | MongoDB Atlas (Cloud) |
+| **Payment** | Stripe API |
+| **Real-Time** | Socket.io (WebSockets) |
+| **Deployment** | Vercel (Frontend) + Render (Backend) |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+Make sure you have **Node.js** installed on your machine.
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/YOUR_USERNAME/food-ordering-app.git
+cd food-ordering-app
