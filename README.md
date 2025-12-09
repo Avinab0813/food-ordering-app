@@ -28,7 +28,7 @@
 
 | **Secure Login** | **Admin Dashboard** |
 |:---:|:---:|
-| <img src="./screenshots/login.png" width="400" /> |
+| <img src="./screenshots/login.png" width="400" /> | *Admin view* |
 
 </div>
 
@@ -41,6 +41,7 @@
 - **🛒 Smart Cart:** Add/remove items with automatic total calculation and delivery fees.
 - **🛵 Real-Time Tracking:** Live order updates (Preparing -> Out for Delivery -> Delivered) using **Socket.io**.
 - **📱 Responsive UI:** Fully optimized for Desktop, Tablet, and Mobile devices.
+- **👨‍🍳 Admin Panel:** Dashboard for restaurant owners to view incoming orders.
 
 ---
 
