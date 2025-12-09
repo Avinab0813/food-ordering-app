@@ -20,7 +20,7 @@ const Cart = ({ cart, addToCart, removeFromCart, setView }) => {
 
     try {
       // 2. Call the Backend
-      const response = await fetch("http://localhost:5000/api/create-checkout-session", {
+      const response = await fetch("https://flavorfleet-api.onrender.com", {
         method: "POST",
         headers: headers,
         body: JSON.stringify(body)

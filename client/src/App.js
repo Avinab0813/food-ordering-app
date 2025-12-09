@@ -117,7 +117,7 @@ function FlavorFleet() {
   // Fetch Menu from Server
   const fetchFood = () => {
     // ⚠️ Change this URL if you deploy!
-    axios.get("http://localhost:5000/api/foods") 
+    axios.get("https://flavorfleet-api.onrender.com") 
       .then((res) => setFoods(res.data))
       .catch((err) => console.error("Server not running?", err));
   };
