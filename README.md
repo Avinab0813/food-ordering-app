@@ -28,7 +28,7 @@
 
 | **Secure Login** | **Admin Dashboard** |
 |:---:|:---:|
-| <img src="./screenshots/login.png" width="400" /> | *Admin view* |
+| <img src="./screenshots/login.png" width="400" /> |
 
 </div>
 
