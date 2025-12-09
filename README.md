@@ -63,7 +63,7 @@
 ### Prerequisites
 Make sure you have **Node.js** installed on your machine.
 
-### 1. Clone the Repository
+###  Clone the Repository
 ```bash
 git clone https://github.com/YOUR_USERNAME/food-ordering-app.git
 cd food-ordering-app
