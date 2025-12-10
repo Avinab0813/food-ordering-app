@@ -1,81 +1,35 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
-// Import Pages/Components
 import Cart from "./Cart";
 import Success from "./Success";
 import Tracker from "./Tracker";
 import Admin from "./Admin";
 import { Routes, Route } from "react-router-dom";
 
-// ⚠️ CHANGE THIS URL BASED ON WHERE YOU ARE RUNNING
-// Local Testing: "http://localhost:5000/api"
-// Live Deployment: "https://flavorfleet-api.onrender.com/api"
+// 🚀 LIVE SERVER URL (Do not change this to localhost)
 const API_URL = "https://flavorfleet-api.onrender.com/api"; 
 
-// --- 1. SPLASH SCREEN ---
+// --- SPLASH SCREEN ---
 const SplashScreen = ({ onFinish }) => {
-  useEffect(() => {
-    const timer = setTimeout(() => { onFinish(); }, 2500);
-    return () => clearTimeout(timer);
-  }, [onFinish]);
-
-  return (
-    <div className="splash-screen">
-      <div className="splash-content">
-        <span className="splash-icon">🚀</span>
-        <h1>FlavorFleet</h1>
-        <p>Delicious food, delivered fast.</p>
-      </div>
-    </div>
-  );
+  useEffect(() => { setTimeout(() => onFinish(), 2000); }, [onFinish]);
+  return <div className="splash-screen"><h1>🚀 FlavorFleet</h1></div>;
 };
 
-// --- 2. LOGIN PAGE ---
-const LoginPage = ({ onLogin }) => {
-  const [isSignup, setIsSignup] = useState(false);
-  return (
-    <div className="login-container">
-      <div className="login-overlay"></div>
-      <div className="login-box">
-        <div className="login-logo">🚀 FlavorFleet</div>
-        <h2>{isSignup ? "Create Account" : "Welcome Back"}</h2>
-        <p className="login-subtitle">{isSignup ? "Join us for tasty meals!" : "Login to access your favorites"}</p>
-        <form onSubmit={(e) => { e.preventDefault(); onLogin(); }}>
-          {isSignup && <div className="input-group"><input type="text" placeholder="Full Name" required /></div>}
-          <div className="input-group"><input type="email" placeholder="Email Address" required /></div>
-          <div className="input-group"><input type="password" placeholder="Password" required /></div>
-          <button type="submit" className="login-btn">{isSignup ? "Sign Up" : "Login"}</button>
-        </form>
-        <div className="divider"><span>OR</span></div>
-        <button className="guest-btn" onClick={onLogin}>Continue as Guest</button>
-        <p className="toggle-text">
-          {isSignup ? "Already have an account?" : "New to FlavorFleet?"} 
-          <span onClick={() => setIsSignup(!isSignup)}>{isSignup ? " Login" : " Create Account"}</span>
-        </p>
-      </div>
+// --- LOGIN PAGE ---
+const LoginPage = ({ onLogin }) => (
+  <div className="login-container">
+    <div className="login-overlay"></div>
+    <div className="login-box">
+      <div className="login-logo">🚀 FlavorFleet</div>
+      <h2>Welcome Back</h2>
+      <p className="login-subtitle">Login to access your favorites</p>
+      <button className="guest-btn" onClick={onLogin}>Continue as Guest</button>
     </div>
-  );
-};
+  </div>
+);
 
-// --- 3. PROFILE PAGE ---
-const Profile = () => {
-  const [details, setDetails] = useState({ name: "Guest User", email: "guest@flavorfleet.com", address: "" });
-  const handleChange = (e) => setDetails({ ...details, [e.target.name]: e.target.value });
-  return (
-    <div className="profile-container">
-      <h2>My Profile</h2>
-      <div className="profile-card">
-        <div className="profile-group"><label>Full Name</label><input type="text" name="name" value={details.name} onChange={handleChange} /></div>
-        <div className="profile-group"><label>Email</label><input type="email" name="email" value={details.email} onChange={handleChange} /></div>
-        <div className="profile-group"><label>Delivery Address</label><input type="text" name="address" placeholder="Enter your address" value={details.address} onChange={handleChange} /></div>
-        <button className="save-btn" onClick={() => alert("Profile Updated!")}>Save Changes</button>
-      </div>
-    </div>
-  );
-};
-
-// --- 4. MAIN APPLICATION ---
+// --- MAIN APP ---
 function FlavorFleet() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(false);
@@ -84,30 +38,22 @@ function FlavorFleet() {
   const [cart, setCart] = useState([]);
   const [category, setCategory] = useState("All");
 
-  const fetchFood = () => {
+  useEffect(() => {
     axios.get(`${API_URL}/foods`)
       .then((res) => setFoods(res.data))
-      .catch((err) => console.error("Error fetching food:", err));
-  };
-
-  useEffect(() => { fetchFood(); }, []);
+      .catch((err) => console.error("Server Error:", err));
+  }, []);
 
   const addToCart = (food) => {
     const exist = cart.find((x) => x._id === food._id);
-    if (exist) {
-      setCart(cart.map((x) => x._id === food._id ? { ...exist, qty: exist.qty + 1 } : x));
-    } else {
-      setCart([...cart, { ...food, qty: 1 }]);
-    }
+    if (exist) setCart(cart.map((x) => x._id === food._id ? { ...exist, qty: exist.qty + 1 } : x));
+    else setCart([...cart, { ...food, qty: 1 }]);
   };
 
   const removeFromCart = (food) => {
     const exist = cart.find((x) => x._id === food._id);
-    if (exist.qty === 1) {
-      setCart(cart.filter((x) => x._id !== food._id));
-    } else {
-      setCart(cart.map((x) => x._id === food._id ? { ...exist, qty: exist.qty - 1 } : x));
-    }
+    if (exist.qty === 1) setCart(cart.filter((x) => x._id !== food._id));
+    else setCart(cart.map((x) => x._id === food._id ? { ...exist, qty: exist.qty - 1 } : x));
   };
 
   const filteredFoods = category === "All" ? foods : foods.filter((item) => item.category === category);
@@ -119,13 +65,11 @@ function FlavorFleet() {
   return (
     <div className="App">
       <nav className="navbar">
-        <div className="logo" onClick={() => setView("menu")}>
-          <span className="logo-icon">🚀</span> Flavor<span className="logo-highlight">Fleet</span>
-        </div>
+        <div className="logo" onClick={() => setView("menu")}>🚀 FlavorFleet</div>
         <div className="nav-links">
-          <button className={`nav-btn ${view === 'menu' ? 'active-link' : ''}`} onClick={() => setView("menu")}>Home</button>
-          <button className={`nav-btn ${view === 'profile' ? 'active-link' : ''}`} onClick={() => setView("profile")}>Profile</button>
-          <button className="nav-btn cart-btn-nav" onClick={() => setView("cart")}>
+          <button className="nav-btn" onClick={() => setView("menu")}>Menu</button>
+          <button className="nav-btn" onClick={() => setView("profile")}>Profile</button>
+          <button className="cart-btn-nav" onClick={() => setView("cart")}>
             Cart ({cart.reduce((a,c)=>a+c.qty,0)})
           </button>
         </div>
@@ -136,25 +80,20 @@ function FlavorFleet() {
           <div className="hero">
             <div className="hero-content">
               <h1>Craving Delicious?</h1>
-              <p>Order fresh food delivered to your doorstep in minutes.</p>
-              <button className="cta-button" onClick={() => window.scrollTo(0, 600)}>View Menu ↓</button>
+              <p>Order fresh food delivered to your doorstep.</p>
             </div>
           </div>
 
           <div className="main-content">
             <div className="filters">
-              {categories.map((cat) => (
+              {categories.map(cat => (
                 <span key={cat} className={category === cat ? "active" : ""} onClick={() => setCategory(cat)}>{cat}</span>
               ))}
             </div>
 
             <div className="food-grid">
               {filteredFoods.map((food) => {
-                // --- LOGIC TO CHECK IF ITEM IS IN CART ---
                 const cartItem = cart.find(item => item._id === food._id);
-                const isAdded = cartItem ? true : false;
-                // -----------------------------------------
-
                 return (
                   <div key={food._id} className="food-card">
                     <div className="image-wrapper">
@@ -163,19 +102,12 @@ function FlavorFleet() {
                     </div>
                     <div className="card-body">
                       <div className="card-header">
-                        <h3>{food.name}</h3>
-                        <span className="price">${food.price}</span>
+                        <h3>{food.name}</h3><span className="price">${food.price}</span>
                       </div>
-                      <p className="food-desc">{food.description || "Fresh and delicious."}</p>
-                      
-                      {/* --- UPDATED BUTTON --- */}
-                      <button 
-                        className={`add-btn ${isAdded ? "added" : ""}`} 
-                        onClick={() => addToCart(food)}
-                      >
-                        {isAdded ? `Added (${cartItem.qty}) ✔` : "Add to Cart"}
+                      <p className="food-desc">{food.description}</p>
+                      <button className={cartItem ? "add-btn added" : "add-btn"} onClick={() => addToCart(food)}>
+                        {cartItem ? `Added ✔` : "Add to Cart"}
                       </button>
-                      {/* ---------------------- */}
                     </div>
                   </div>
                 );
@@ -186,7 +118,7 @@ function FlavorFleet() {
       )}
 
       {view === "cart" && <div className="main-content"><Cart cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} setView={setView} /></div>}
-      {view === "profile" && <div className="main-content"><Profile /></div>}
+      {view === "profile" && <div className="main-content"><div className="profile-container"><h2>Guest Profile</h2></div></div>}
     </div>
   );
 }
@@ -201,5 +133,4 @@ function App() {
     </Routes>
   );
 }
-
 export default App;

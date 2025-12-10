@@ -1,97 +1,58 @@
 import React from 'react';
 
 const Cart = ({ cart, addToCart, removeFromCart, setView }) => {
-  const subtotal = cart.reduce((a, c) => a + c.price * c.qty, 0);
-  const deliveryFee = subtotal > 0 ? 5.00 : 0;
-  const total = subtotal + deliveryFee;
-
-  // --- STRIPE PAYMENT LOGIC (FIXED) ---
+  const total = cart.reduce((a, c) => a + c.price * c.qty, 0) + (cart.length > 0 ? 5 : 0);
+  
   const makePayment = async () => {
-    
-    // 1. Match the Backend Expectation: Use 'cartItems'
-    const body = {
-      cartItems: cart 
-    };
-
-    const headers = {
-      "Content-Type": "application/json"
-    };
-
     try {
-      // 2. Call the Backend (FIXED URL HERE)
-      // We added "/api/create-checkout-session" to the end
+      // 🚀 LIVE SERVER URL
       const response = await fetch("https://flavorfleet-api.onrender.com/api/create-checkout-session", {
         method: "POST",
-        headers: headers,
-        body: JSON.stringify(body)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartItems: cart })
       });
-
       const session = await response.json();
-
-      // 3. Handle Errors
-      if (!response.ok) {
-        console.error("Server Error:", session.error);
-        alert("Payment Failed: " + (session.error || "Unknown Error"));
-        return;
-      }
-
-      // 4. Redirect using the URL
+      
       if (session.url) {
         window.location.href = session.url;
       } else {
-        console.error("Error: No Payment URL received");
+        alert("Payment Error: " + (session.error || "Unknown"));
       }
-      
-    } catch (error) {
-      console.error("Network Error:", error);
-      alert("Network Error: Could not connect to payment server.");
+    } catch (err) {
+      console.error(err);
+      alert("Network Error: Could not reach server.");
     }
   };
 
   return (
     <div className="cart-page">
       <h2>Your Order</h2>
-      
       {cart.length === 0 ? (
-        <div className="empty-cart">
-          <p>Your cart is empty.</p>
-          <button className="nav-btn" onClick={() => setView('menu')}>Browse Menu</button>
-        </div>
+        <div className="empty-cart"><p>Your cart is empty.</p><button className="nav-btn" onClick={() => setView('menu')}>Browse Menu</button></div>
       ) : (
         <div className="cart-layout">
           <div className="cart-items">
-            {cart.map((item) => (
+            {cart.map(item => (
               <div key={item._id} className="cart-item">
                 <img src={item.image} alt={item.name} />
-                <div className="item-info">
-                  <h4>{item.name}</h4>
-                  <p>${item.price}</p>
-                </div>
+                <div className="item-info"><h4>{item.name}</h4><p>${item.price}</p></div>
                 <div className="qty-controls">
-                  <button onClick={() => removeFromCart(item)}>-</button>
-                  <span>{item.qty}</span>
-                  <button onClick={() => addToCart(item)}>+</button>
+                  <button onClick={() => removeFromCart(item)}>-</button><span>{item.qty}</span><button onClick={() => addToCart(item)}>+</button>
                 </div>
               </div>
             ))}
           </div>
-
           <div className="cart-summary">
             <h3>Bill Details</h3>
-            <div className="summary-row"><span>Item Total</span><span>${subtotal.toFixed(2)}</span></div>
-            <div className="summary-row"><span>Delivery Fee</span><span>${deliveryFee.toFixed(2)}</span></div>
+            <div className="summary-row"><span>Item Total</span><span>${(total - 5).toFixed(2)}</span></div>
+            <div className="summary-row"><span>Delivery Fee</span><span>$5.00</span></div>
             <hr />
             <div className="summary-row total"><span>To Pay</span><span>${total.toFixed(2)}</span></div>
-            
-            <button className="checkout-btn" onClick={makePayment}>
-              Pay with Stripe
-            </button>
-            
+            <button className="checkout-btn" onClick={makePayment}>Pay with Stripe</button>
           </div>
         </div>
       )}
     </div>
   );
 };
-
 export default Cart;

@@ -1,16 +1,31 @@
+/* =========================================
+   1. GLOBAL STYLES & VARIABLES
+   ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 :root {
-  --primary: #ff4757;
+  --primary: #ff4757;       /* Tasty Red */
   --primary-hover: #e04050;
-  --bg-color: #f7f8fc;
+  --success: #2ed573;       /* Success Green */
+  --bg-color: #f7f8fc;      /* Light Background */
   --text-dark: #2f3542;
   --text-light: #747d8c;
+  --card-bg: #ffffff;
 }
 
-body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-dark); }
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+}
 
-/* --- SPLASH SCREEN --- */
+button { font-family: 'Poppins', sans-serif; }
+
+/* =========================================
+   2. SPLASH SCREEN
+   ========================================= */
 .splash-screen {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background: white; z-index: 2000;
@@ -19,10 +34,13 @@ body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg
 .splash-content { text-align: center; animation: fadeIn 1s ease; }
 .splash-icon { font-size: 4rem; display: block; animation: bounce 2s infinite; }
 .splash-content h1 { font-size: 2.5rem; color: var(--primary); margin: 10px 0; }
+
 @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-20px);} }
 @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
 
-/* --- LOGIN PAGE (Mobile Fixed) --- */
+/* =========================================
+   3. LOGIN PAGE
+   ========================================= */
 .login-container {
   height: 100vh; display: flex; align-items: center; justify-content: center;
   background: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1920&q=80') center/cover;
@@ -30,54 +48,54 @@ body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg
 }
 .login-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1; }
 .login-box {
-  background: rgba(255,255,255,0.95);
-  /* MOBILE FIX: Use percentage width with a max limit */
-  width: 90%; 
-  max-width: 380px; 
-  padding: 40px 20px; 
-  border-radius: 20px;
+  background: rgba(255,255,255,0.95); width: 90%; max-width: 380px; padding: 40px; border-radius: 20px;
   text-align: center; z-index: 2; box-shadow: 0 15px 35px rgba(0,0,0,0.3); backdrop-filter: blur(5px);
 }
 .login-logo { font-size: 1.8rem; font-weight: 800; color: var(--primary); margin-bottom: 10px; text-transform: uppercase; }
 .login-box h2 { margin-bottom: 5px; color: var(--text-dark); }
 .login-subtitle { color: var(--text-light); margin-bottom: 25px; font-size: 0.9rem; }
 .input-group input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+
 .login-btn { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+.login-btn:hover { background: var(--primary-hover); }
+
 .guest-btn { width: 100%; padding: 12px; background: transparent; border: 2px solid var(--text-dark); color: var(--text-dark); border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.3s; }
-.divider { margin: 20px 0; font-size: 0.8rem; color: #aaa; }
+.guest-btn:hover { background: var(--text-dark); color: white; }
+
+.divider { margin: 20px 0; font-size: 0.8rem; color: #aaa; position: relative; }
+.divider span { background: rgba(255,255,255,0.95); padding: 0 10px; position: relative; z-index: 1; }
+.divider::before { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: #ddd; z-index: 0; }
+
 .toggle-text { margin-top: 15px; font-size: 0.9rem; color: var(--text-light); }
 .toggle-text span { color: var(--primary); font-weight: 600; cursor: pointer; }
 
-/* --- NAVBAR (Mobile Fixed) --- */
-.navbar { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  padding: 15px 5%; 
-  background: white; 
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
-  position: sticky; 
-  top: 0; 
-  z-index: 100; 
-}
+/* =========================================
+   4. NAVBAR
+   ========================================= */
+.navbar { display: flex; justify-content: space-between; padding: 15px 5%; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
 .logo { font-size: 1.5rem; font-weight: 800; color: var(--text-dark); cursor: pointer; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
 .logo-highlight { color: var(--primary); }
 .nav-links { display: flex; align-items: center; gap: 15px; }
 .nav-btn { background: none; border: none; font-size: 1rem; font-weight: 600; color: var(--text-light); cursor: pointer; transition: 0.3s; font-family: inherit; }
 .nav-btn:hover, .active-link { color: var(--primary); }
-.cart-btn-nav { background: var(--primary); color: white !important; padding: 8px 15px; border-radius: 20px; box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3); white-space: nowrap;}
+.cart-btn-nav { background: var(--primary); color: white !important; padding: 8px 15px; border-radius: 20px; box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3); white-space: nowrap; }
+.cart-btn-nav:hover { transform: translateY(-2px); background: var(--primary-hover); }
 
-/* --- HERO --- */
+/* =========================================
+   5. HERO SECTION
+   ========================================= */
 .hero {
   height: 400px; display: flex; align-items: center; justify-content: center; text-align: center; color: white;
   background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600');
-  background-size: cover; background-position: center;
-  padding: 0 20px; /* Prevents text hitting edges on mobile */
+  background-size: cover; background-position: center; padding: 0 20px;
 }
 .hero-content h1 { font-size: 3.5rem; margin-bottom: 10px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); line-height: 1.1; }
 .cta-button { padding: 12px 30px; background: var(--primary); color: white; border: none; border-radius: 30px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+.cta-button:hover { transform: scale(1.05); }
 
-/* --- MENU --- */
+/* =========================================
+   6. MENU GRID & CARDS
+   ========================================= */
 .main-content { padding: 50px 10%; }
 .filters { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
 .filters span { padding: 8px 20px; background: white; border: 1px solid #eee; border-radius: 20px; cursor: pointer; color: var(--text-dark); font-weight: 500; transition: 0.3s; }
@@ -85,8 +103,9 @@ body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg
 
 .food-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
 .food-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #f0f0f0; }
-.food-image { width: 100%; height: 220px; object-fit: cover; }
+.food-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
 .image-wrapper { position: relative; }
+.food-image { width: 100%; height: 220px; object-fit: cover; }
 .cat-badge { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.9); padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: 700; color: var(--text-dark); }
 
 .card-body { padding: 20px; display: flex; flex-direction: column; height: 180px; }
@@ -94,22 +113,45 @@ body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg
 .card-header h3 { font-size: 1.2rem; margin: 0; }
 .price { font-weight: 700; color: var(--primary); font-size: 1.1rem; }
 .food-desc { font-size: 0.9rem; color: var(--text-light); line-height: 1.5; margin-bottom: 20px; height: 40px; overflow: hidden; }
-.add-btn { width: 100%; padding: 12px; background: white; border: 1px solid var(--primary); color: var(--primary); font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+
+/* --- ADD TO CART BUTTON (Default) --- */
+.add-btn {
+  width: 100%; padding: 12px;
+  background: white; border: 1px solid var(--primary);
+  color: var(--primary); font-weight: 600; border-radius: 8px;
+  cursor: pointer; transition: 0.3s;
+}
 .add-btn:hover { background: var(--primary); color: white; }
 
-/* --- CART PAGE --- */
+/* --- ADD TO CART BUTTON (Green/Added State) --- */
+.add-btn.added {
+  background-color: var(--success) !important;
+  color: white !important;
+  border-color: var(--success) !important;
+}
+.add-btn.added:hover {
+  background-color: #26af61 !important;
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   7. SHOPPING CART
+   ========================================= */
 .cart-layout { display: flex; gap: 40px; }
-.cart-items { flex: 2; margin-right: 20px;}
+.cart-items { flex: 2; margin-right: 20px; }
 .cart-summary { flex: 1; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); height: fit-content; }
 .cart-item { display: flex; align-items: center; background: white; padding: 15px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
 .cart-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 10px; margin-right: 20px; }
-.checkout-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
 .qty-controls { display: flex; align-items: center; gap: 10px; background: #f1f2f6; padding: 5px 15px; border-radius: 20px; }
 .qty-controls button { background: none; border: none; font-weight: bold; cursor: pointer; font-size: 1.2rem; }
 .summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--text-light); }
 .summary-row.total { color: var(--text-dark); font-weight: 700; font-size: 1.3rem; margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
+.checkout-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+.checkout-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
 
-/* --- PROFILE --- */
+/* =========================================
+   8. PROFILE PAGE
+   ========================================= */
 .profile-container { max-width: 500px; margin: 0 auto; }
 .profile-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 .profile-group { margin-bottom: 20px; }
@@ -118,39 +160,17 @@ body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg
 .save-btn { width: 100%; padding: 12px; background: var(--text-dark); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
 
 /* =========================================
-   MOBILE RESPONSIVENESS (The Fix!)
+   9. MOBILE RESPONSIVENESS
    ========================================= */
 @media (max-width: 768px) {
-  /* Navbar: Stack layout */
   .navbar { flex-direction: column; padding: 15px; gap: 15px; }
   .nav-links { width: 100%; justify-content: space-between; gap: 5px; }
   .nav-btn { font-size: 0.9rem; padding: 5px; margin: 0; }
-  
-  /* Hero: Smaller Text */
   .hero { height: 250px; }
   .hero-content h1 { font-size: 2rem; }
-  
-  /* Menu: Reduce padding */
   .main-content { padding: 30px 15px; }
-  .food-grid { grid-template-columns: 1fr; } /* Single column for food */
-  
-  /* Cart: Stack items vertically */
+  .food-grid { grid-template-columns: 1fr; }
   .cart-layout { flex-direction: column; gap: 20px; }
   .cart-items { margin-right: 0; }
   .cart-summary { padding: 20px; }
-  .cart-item { flex-direction: row; padding: 10px; } /* Keep items compact */
-  
-  /* Login: Better width */
-  .login-box { width: 90%; padding: 30px 15px; }
- 
-  /* --- BUTTON STATE: ADDED TO CART --- */
-.add-btn.added {
-  background-color: #2ed573; /* Success Green */
-  color: white;
-  border-color: #2ed573;
-}
-
-.add-btn.added:hover {
-  background-color: #26af61;
-}
 }
