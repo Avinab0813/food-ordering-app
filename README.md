@@ -11,8 +11,6 @@
   <br />
   
   **A full-stack MERN application delivering a seamless food ordering experience with real-time tracking, secure payments, and a professional UI.**
-
-  [**🔴 View Live Demo**](https://food-ordering-app-something-else.vercel.app)
   
 </div>
 
