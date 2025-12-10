@@ -1,5 +1,4 @@
 import React from 'react';
-// We don't need loadStripe anymore because we redirect via URL now!
 
 const Cart = ({ cart, addToCart, removeFromCart, setView }) => {
   const subtotal = cart.reduce((a, c) => a + c.price * c.qty, 0);
@@ -19,8 +18,9 @@ const Cart = ({ cart, addToCart, removeFromCart, setView }) => {
     };
 
     try {
-      // 2. Call the Backend
-      const response = await fetch("https://flavorfleet-api.onrender.com", {
+      // 2. Call the Backend (FIXED URL HERE)
+      // We added "/api/create-checkout-session" to the end
+      const response = await fetch("https://flavorfleet-api.onrender.com/api/create-checkout-session", {
         method: "POST",
         headers: headers,
         body: JSON.stringify(body)
@@ -35,7 +35,7 @@ const Cart = ({ cart, addToCart, removeFromCart, setView }) => {
         return;
       }
 
-      // 4. Redirect using the URL (The Modern Way)
+      // 4. Redirect using the URL
       if (session.url) {
         window.location.href = session.url;
       } else {
@@ -44,6 +44,7 @@ const Cart = ({ cart, addToCart, removeFromCart, setView }) => {
       
     } catch (error) {
       console.error("Network Error:", error);
+      alert("Network Error: Could not connect to payment server.");
     }
   };
 
@@ -54,13 +55,13 @@ const Cart = ({ cart, addToCart, removeFromCart, setView }) => {
       {cart.length === 0 ? (
         <div className="empty-cart">
           <p>Your cart is empty.</p>
-          <button onClick={() => setView('menu')}>Browse Menu</button>
+          <button className="nav-btn" onClick={() => setView('menu')}>Browse Menu</button>
         </div>
       ) : (
         <div className="cart-layout">
           <div className="cart-items">
             {cart.map((item) => (
-              <div key={item.id} className="cart-item">
+              <div key={item._id} className="cart-item">
                 <img src={item.image} alt={item.name} />
                 <div className="item-info">
                   <h4>{item.name}</h4>
