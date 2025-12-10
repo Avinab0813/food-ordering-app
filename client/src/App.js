@@ -8,12 +8,17 @@ import Tracker from "./Tracker";
 import Admin from "./Admin";
 import { Routes, Route } from "react-router-dom";
 
+// ⚠️ CHANGE THIS URL BASED ON WHERE YOU ARE RUNNING
+// Local Testing: "http://localhost:5000/api"
+// Live Deployment: "https://flavorfleet-api.onrender.com/api" (Replace with your actual Render link)
+const API_URL = "https://flavorfleet-api.onrender.com/api"; 
+
 // --- 1. SPLASH SCREEN ---
 const SplashScreen = ({ onFinish }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onFinish();
-    }, 2500); // Show for 2.5 seconds
+    }, 2500);
     return () => clearTimeout(timer);
   }, [onFinish]);
 
@@ -28,7 +33,7 @@ const SplashScreen = ({ onFinish }) => {
   );
 };
 
-// --- 2. PROFESSIONAL LOGIN PAGE ---
+// --- 2. LOGIN PAGE ---
 const LoginPage = ({ onLogin }) => {
   const [isSignup, setIsSignup] = useState(false);
 
@@ -105,7 +110,7 @@ const Profile = () => {
   );
 };
 
-// --- 4. MAIN FLAVORFLEET APP ---
+// --- 4. MAIN APPLICATION ---
 function FlavorFleet() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(false);
@@ -114,12 +119,11 @@ function FlavorFleet() {
   const [cart, setCart] = useState([]);
   const [category, setCategory] = useState("All");
 
-  // Fetch Menu from Server
+  // Fetch Menu
   const fetchFood = () => {
-    // ⚠️ Change this URL if you deploy!
-    axios.get("https://flavorfleet-api.onrender.com") 
+    axios.get(`${API_URL}/foods`)
       .then((res) => setFoods(res.data))
-      .catch((err) => console.error("Server not running?", err));
+      .catch((err) => console.error("Error fetching food. Is the server running?", err));
   };
 
   useEffect(() => { fetchFood(); }, []);
@@ -132,7 +136,6 @@ function FlavorFleet() {
     } else {
       setCart([...cart, { ...food, qty: 1 }]);
     }
-    // Optional: alert(`${food.name} added!`);
   };
 
   const removeFromCart = (food) => {

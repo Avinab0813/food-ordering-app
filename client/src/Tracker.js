@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 
 // Connect to Backend
-const socket = io.connect("http://localhost:5000");
+const socket = io.connect("https://flavorfleet-api.onrender.com");
 
 function Tracker() {
   const [status, setStatus] = useState("Order Received ✅");
