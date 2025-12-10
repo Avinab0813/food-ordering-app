@@ -7,29 +7,84 @@ import Tracker from "./Tracker";
 import Admin from "./Admin";
 import { Routes, Route } from "react-router-dom";
 
-// 🚀 LIVE SERVER URL (Do not change this to localhost)
+// 🚀 LIVE SERVER URL
 const API_URL = "https://flavorfleet-api.onrender.com/api"; 
 
-// --- SPLASH SCREEN ---
+// --- 1. SPLASH SCREEN ---
 const SplashScreen = ({ onFinish }) => {
   useEffect(() => { setTimeout(() => onFinish(), 2000); }, [onFinish]);
   return <div className="splash-screen"><h1>🚀 FlavorFleet</h1></div>;
 };
 
-// --- LOGIN PAGE ---
-const LoginPage = ({ onLogin }) => (
-  <div className="login-container">
-    <div className="login-overlay"></div>
-    <div className="login-box">
-      <div className="login-logo">🚀 FlavorFleet</div>
-      <h2>Welcome Back</h2>
-      <p className="login-subtitle">Login to access your favorites</p>
-      <button className="guest-btn" onClick={onLogin}>Continue as Guest</button>
-    </div>
-  </div>
-);
+// --- 2. FULL LOGIN PAGE (Restored) ---
+const LoginPage = ({ onLogin }) => {
+  const [isSignup, setIsSignup] = useState(false);
 
-// --- MAIN APP ---
+  return (
+    <div className="login-container">
+      <div className="login-overlay"></div>
+      <div className="login-box">
+        <div className="login-logo">🚀 FlavorFleet</div>
+        <h2>{isSignup ? "Create Account" : "Welcome Back"}</h2>
+        <p className="login-subtitle">
+          {isSignup ? "Join us for tasty meals!" : "Login to access your favorites"}
+        </p>
+
+        {/* Fake Form for Visuals */}
+        <form onSubmit={(e) => { e.preventDefault(); onLogin(); }}>
+          {isSignup && (
+            <div className="input-group">
+              <input type="text" placeholder="Full Name" required />
+            </div>
+          )}
+          <div className="input-group">
+            <input type="email" placeholder="Email Address" required />
+          </div>
+          <div className="input-group">
+            <input type="password" placeholder="Password" required />
+          </div>
+
+          <button type="submit" className="login-btn">
+            {isSignup ? "Sign Up" : "Login"}
+          </button>
+        </form>
+
+        <div className="divider"><span>OR</span></div>
+
+        <button className="guest-btn" onClick={onLogin}>
+          Continue as Guest
+        </button>
+
+        <p className="toggle-text">
+          {isSignup ? "Already have an account?" : "New to FlavorFleet?"} 
+          <span onClick={() => setIsSignup(!isSignup)}>
+            {isSignup ? " Login" : " Create Account"}
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+// --- 3. PROFILE PAGE ---
+const Profile = () => {
+  const [details, setDetails] = useState({ name: "Guest User", email: "guest@flavorfleet.com", address: "" });
+  const handleChange = (e) => setDetails({ ...details, [e.target.name]: e.target.value });
+
+  return (
+    <div className="profile-container">
+      <h2>My Profile</h2>
+      <div className="profile-card">
+        <div className="profile-group"><label>Full Name</label><input type="text" name="name" value={details.name} onChange={handleChange} /></div>
+        <div className="profile-group"><label>Email</label><input type="email" name="email" value={details.email} onChange={handleChange} /></div>
+        <div className="profile-group"><label>Delivery Address</label><input type="text" name="address" placeholder="Enter your address" value={details.address} onChange={handleChange} /></div>
+        <button className="save-btn" onClick={() => alert("Profile Updated!")}>Save Changes</button>
+      </div>
+    </div>
+  );
+};
+
+// --- 4. MAIN APP ---
 function FlavorFleet() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(false);
@@ -46,8 +101,11 @@ function FlavorFleet() {
 
   const addToCart = (food) => {
     const exist = cart.find((x) => x._id === food._id);
-    if (exist) setCart(cart.map((x) => x._id === food._id ? { ...exist, qty: exist.qty + 1 } : x));
-    else setCart([...cart, { ...food, qty: 1 }]);
+    if (exist) {
+      setCart(cart.map((x) => x._id === food._id ? { ...exist, qty: exist.qty + 1 } : x));
+    } else {
+      setCart([...cart, { ...food, qty: 1 }]);
+    }
   };
 
   const removeFromCart = (food) => {
@@ -67,9 +125,9 @@ function FlavorFleet() {
       <nav className="navbar">
         <div className="logo" onClick={() => setView("menu")}>🚀 FlavorFleet</div>
         <div className="nav-links">
-          <button className="nav-btn" onClick={() => setView("menu")}>Menu</button>
-          <button className="nav-btn" onClick={() => setView("profile")}>Profile</button>
-          <button className="cart-btn-nav" onClick={() => setView("cart")}>
+          <button className={`nav-btn ${view === 'menu' ? 'active-link' : ''}`} onClick={() => setView("menu")}>Home</button>
+          <button className={`nav-btn ${view === 'profile' ? 'active-link' : ''}`} onClick={() => setView("profile")}>Profile</button>
+          <button className="nav-btn cart-btn-nav" onClick={() => setView("cart")}>
             Cart ({cart.reduce((a,c)=>a+c.qty,0)})
           </button>
         </div>
@@ -93,7 +151,11 @@ function FlavorFleet() {
 
             <div className="food-grid">
               {filteredFoods.map((food) => {
+                // --- LOGIC FOR GREEN BUTTON (Restored) ---
                 const cartItem = cart.find(item => item._id === food._id);
+                const isAdded = cartItem ? true : false;
+                // ----------------------------------------
+
                 return (
                   <div key={food._id} className="food-card">
                     <div className="image-wrapper">
@@ -105,9 +167,15 @@ function FlavorFleet() {
                         <h3>{food.name}</h3><span className="price">${food.price}</span>
                       </div>
                       <p className="food-desc">{food.description}</p>
-                      <button className={cartItem ? "add-btn added" : "add-btn"} onClick={() => addToCart(food)}>
-                        {cartItem ? `Added ✔` : "Add to Cart"}
+                      
+                      {/* --- BUTTON CHANGES TO GREEN --- */}
+                      <button 
+                        className={isAdded ? "add-btn added" : "add-btn"} 
+                        onClick={() => addToCart(food)}
+                      >
+                        {isAdded ? `Added (${cartItem.qty}) ✔` : "Add to Cart"}
                       </button>
+                      {/* ------------------------------- */}
                     </div>
                   </div>
                 );
@@ -118,7 +186,7 @@ function FlavorFleet() {
       )}
 
       {view === "cart" && <div className="main-content"><Cart cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} setView={setView} /></div>}
-      {view === "profile" && <div className="main-content"><div className="profile-container"><h2>Guest Profile</h2></div></div>}
+      {view === "profile" && <div className="main-content"><Profile /></div>}
     </div>
   );
 }
