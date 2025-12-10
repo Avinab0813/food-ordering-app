@@ -8,16 +8,9 @@ import Tracker from "./Tracker";
 import Admin from "./Admin";
 import { Routes, Route } from "react-router-dom";
 
-// =================================================================
 // ⚠️ API CONFIGURATION
-// Use the Render URL for your Live Website.
-// Use Localhost only if running the server on your laptop.
-// =================================================================
-
 const API_URL = "https://flavorfleet-api.onrender.com/api"; 
 // const API_URL = "http://localhost:5000/api"; 
-
-// =================================================================
 
 // --- 1. SPLASH SCREEN ---
 const SplashScreen = ({ onFinish }) => {
@@ -151,30 +144,46 @@ function FlavorFleet() {
     }
   };
 
-  // Filter Logic
   const filteredFoods = category === "All" 
     ? foods 
     : foods.filter((item) => item.category === category);
   
   const categories = ["All", "Burger", "Pizza", "Salad", "Appetizer", "Dessert", "Drink"];
 
-  // Render Logic
   if (loading) return <SplashScreen onFinish={() => setLoading(false)} />;
   if (!user) return <LoginPage onLogin={() => setUser(true)} />;
 
   return (
     <div className="App">
       
-      {/* NAVBAR */}
+      {/* --- NAVBAR (UPDATED ORDER) --- */}
       <nav className="navbar">
         <div className="logo" onClick={() => setView("menu")}>
           <span className="logo-icon">🚀</span> Flavor<span className="logo-highlight">Fleet</span>
         </div>
         <div className="nav-links">
-          <button className={`nav-btn ${view === 'menu' ? 'active-link' : ''}`} onClick={() => setView("menu")}>Home</button>
-          <button className={`nav-btn ${view === 'profile' ? 'active-link' : ''}`} onClick={() => setView("profile")}>Profile</button>
-          <button className="nav-btn cart-btn-nav" onClick={() => setView("cart")}>
+          {/* 1. HOME (Left) */}
+          <button 
+            className={`nav-btn ${view === 'menu' ? 'active-link' : ''}`} 
+            onClick={() => setView("menu")}
+          >
+            Home
+          </button>
+
+          {/* 2. CART (Middle) - Highlighted */}
+          <button 
+            className="nav-btn cart-btn-nav" 
+            onClick={() => setView("cart")}
+          >
             Cart ({cart.reduce((a,c)=>a+c.qty,0)})
+          </button>
+
+          {/* 3. PROFILE (Right) */}
+          <button 
+            className={`nav-btn ${view === 'profile' ? 'active-link' : ''}`} 
+            onClick={() => setView("profile")}
+          >
+            Profile 👤
           </button>
         </div>
       </nav>
@@ -191,7 +200,6 @@ function FlavorFleet() {
           </div>
 
           <div className="main-content">
-            {/* Filters */}
             <div className="filters">
               {categories.map((cat) => (
                 <span 
@@ -204,10 +212,8 @@ function FlavorFleet() {
               ))}
             </div>
 
-            {/* Food Grid */}
             <div className="food-grid">
               {filteredFoods.map((food) => {
-                // Check if item is in cart
                 const cartItem = cart.find(item => item._id === food._id);
                 const isAdded = cartItem ? true : false;
 
@@ -224,7 +230,6 @@ function FlavorFleet() {
                       </div>
                       <p className="food-desc">{food.description || "Fresh and delicious."}</p>
                       
-                      {/* GREEN BUTTON LOGIC */}
                       <button 
                         className={isAdded ? "add-btn added" : "add-btn"} 
                         onClick={() => addToCart(food)}
@@ -263,7 +268,6 @@ function FlavorFleet() {
   );
 }
 
-// --- APP ROUTER ---
 function App() {
   return (
     <Routes>
