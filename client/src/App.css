@@ -142,4 +142,15 @@ body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg
   
   /* Login: Better width */
   .login-box { width: 90%; padding: 30px 15px; }
+ 
+  /* --- BUTTON STATE: ADDED TO CART --- */
+.add-btn.added {
+  background-color: #2ed573; /* Success Green */
+  color: white;
+  border-color: #2ed573;
+}
+
+.add-btn.added:hover {
+  background-color: #26af61;
+}
 }
