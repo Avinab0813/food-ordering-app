@@ -22,7 +22,7 @@ const API_URL = "https://flavorfleet-api.onrender.com/api";
 // --- 1. SPLASH SCREEN ---
 const SplashScreen = ({ onFinish }) => {
   useEffect(() => {
-    const timer = setTimeout(() => { onFinish(); }, 2500); // 2.5 seconds
+    const timer = setTimeout(() => { onFinish(); }, 2500);
     return () => clearTimeout(timer);
   }, [onFinish]);
 
@@ -114,7 +114,7 @@ const Profile = () => {
   );
 };
 
-// --- 4. MAIN APPLICATION ---
+// --- 4. MAIN FLAVORFLEET APP ---
 function FlavorFleet() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(false);
@@ -131,19 +131,6 @@ function FlavorFleet() {
   };
 
   useEffect(() => { fetchFood(); }, []);
-
-  // --- EMERGENCY FIX BUTTON ---
-  const fixDatabase = async () => {
-    if(window.confirm("This will reset the menu to 15 items. Continue?")) {
-      try {
-        await axios.post(`${API_URL}/seed`);
-        alert("✅ Menu Restored! Page will reload.");
-        window.location.reload();
-      } catch (err) {
-        alert("Error connecting to server.");
-      }
-    }
-  };
 
   // Cart Logic
   const addToCart = (food) => {
@@ -188,11 +175,6 @@ function FlavorFleet() {
           <button className={`nav-btn ${view === 'profile' ? 'active-link' : ''}`} onClick={() => setView("profile")}>Profile</button>
           <button className="nav-btn cart-btn-nav" onClick={() => setView("cart")}>
             Cart ({cart.reduce((a,c)=>a+c.qty,0)})
-          </button>
-          
-          {/* TEMP BUTTON: Use this if menu is empty */}
-          <button onClick={fixDatabase} style={{background:"red", color:"white", padding:"5px", borderRadius:"5px", fontSize:"0.8rem"}}>
-            ⚠ Fix Menu
           </button>
         </div>
       </nav>
